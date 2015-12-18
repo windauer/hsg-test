@@ -39,6 +39,7 @@
 	<target name="prepare">
 		<mkdir dir="${binaries}" />
 		<mkdir dir="${libs}" />
+		<mkdir dir="${build}" />
 	</target>
 
 	<target name="setup" description="Download all required tools" depends="prepare,ivy.setup,selenium.setup,jmeter.anttask.setup,jmeter.setup">
@@ -102,7 +103,7 @@
 	</target>
 
 	<!-- Java compilation -->
-	<target name="compile-main" description="build java classes" depends="ivy.taskdef" xmlns:ivy="antlib:org.apache.ivy.ant">
+	<target name="compile-main" description="build java classes" depends="prepare,ivy.taskdef" xmlns:ivy="antlib:org.apache.ivy.ant">
 		<ivy:cachepath pathid="main.classpath" conf="compile" />
 
 		<mkdir dir="${main_classes}" />
@@ -176,7 +177,7 @@
 	</target>
 
 
-	<target name="run-jmeter-tests" description="run jmeter tests" depends="jmeter.anttask.setup, jmeter.setup">
+	<target name="run-jmeter-tests" description="run jmeter tests" depends="prepare,jmeter.anttask.setup, jmeter.setup">
 		<taskdef name="jmeter" classname="org.programmerplanet.ant.taskdefs.jmeter.JMeterTask" classpath="${binaries}/${jmeter.anttask.dist}" />
 
 		<!-- clean up -->
@@ -216,7 +217,7 @@
 		</java>
 	</target>
 
-	<target name="clean-generated-tests">
+	<target name="clean-generated-tests" depends="prepare">
 		<delete>
 			<fileset dir="${generated_java_src}">
 			</fileset>
@@ -228,5 +229,5 @@
 	</target>
 
 	<!-- Do nothing gets called from hsg-project 'ant all' -->
-	<target name="noop"/>
+	<target name="noop" depends="prepare"/>
 </project>
