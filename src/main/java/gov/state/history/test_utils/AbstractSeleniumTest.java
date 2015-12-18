@@ -36,16 +36,20 @@ public abstract class AbstractSeleniumTest {
 	
 	protected void basicPageVerification(String descr) {
 		if(!isElementPresent(By.id("content-inner"))) {
-			String errorMsg;
+			String errorMsg = null;
 			try {
 				WebElement errorH1 = driver.findElement(By.xpath("//div[@data-template='app:handle-error']/h1"));
 				errorMsg = "Error page \"" + errorH1.getText() + "\" for: ";
 			} catch(NoSuchElementException e) {
-				errorMsg = "Page does not contain required element #content-inner: ";
+				if(!isElementPresent(By.id("content"))) {
+					errorMsg = "Page does not contain required elements #content-inner or #content: ";
+				}
 			}
-			
-			verificationErrors.append(errorMsg)
-				.append(driver.getCurrentUrl()).append(" ").append(descr).append("\n");
+
+			if(errorMsg != null) {
+				verificationErrors.append(errorMsg)
+					.append(driver.getCurrentUrl()).append(" ").append(descr).append("\n");
+			}
 		}
 	}
 

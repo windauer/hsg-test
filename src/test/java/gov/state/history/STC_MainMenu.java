@@ -14,7 +14,7 @@ import gov.state.history.test_utils.HSGUtils;
  * Tests integrity of the HSG main menu. 
  */
 public class STC_MainMenu extends AbstractSeleniumTest {
-	@Test @Ignore
+	@Test
 	public void testHomeButton() throws Exception {
 		driver.get(HSGUtils.getApplicationUrl() + "/open");
 
@@ -25,7 +25,7 @@ public class STC_MainMenu extends AbstractSeleniumTest {
 		basicPageVerification("(Home button)");
 	}
 
-	@Test @Ignore
+	@Ignore @Test
 	public void testMainMenuNoBack() throws Exception {
 		driver.get(HSGUtils.getApplicationUrl() + "/open");
 

@@ -41,11 +41,12 @@ public class STC_Article extends AbstractSeleniumTest {
 		WebElement content = contentInner.findElement(By.className("content"));
 		assertThat(content.getText()).isNotEmpty();
 		
-		WebElement toc = driver.findElement(By.id("toc"));
-		WebElement toc_h2 = toc.findElement(By.tagName("h2"));
-		assertThat(toc_h2.getText()).isNotEmpty();
-		List<WebElement> toc_elements = toc.findElements(By.tagName("li"));
-		assertThat(toc_elements).isNotEmpty();
+// commented when the left panel was removed
+//		WebElement toc = driver.findElement(By.id("toc"));
+//		WebElement toc_h2 = toc.findElement(By.tagName("h2"));
+//		assertThat(toc_h2.getText()).isNotEmpty();
+//		List<WebElement> toc_elements = toc.findElements(By.tagName("li"));
+//		assertThat(toc_elements).isNotEmpty();
 	}
 
 	@Test
@@ -54,6 +55,7 @@ public class STC_Article extends AbstractSeleniumTest {
 		checkArrow("nav-next", "right");
 		checkReferencePanel("person-panel", false);
 		checkReferencePanel("gloss-panel", false);
+		//checkBreadcrumb();
 	}
 
 	private void checkArrow(String arrowClass, String text) {
@@ -80,5 +82,26 @@ public class STC_Article extends AbstractSeleniumTest {
 				fail("Missing element #" + elementId);
 			}
 		}		
+	}
+
+	private void checkBreadcrumb() {
+		int howFarRecently = 0;
+		superloop: for(;;) {
+			int howFarNow = 0;
+			WebElement bc = driver.findElement(By.className("breadcrumb"));
+			List<WebElement> bcItems = bc.findElements(By.tagName("a"));
+			System.out.println("Elementów " + bcItems.size());
+			for(WebElement item : bcItems) {
+				howFarNow++;
+				if(howFarNow <= howFarRecently)
+					continue;
+				howFarRecently = howFarNow;
+				item.click();
+				basicPageVerification("breadcrump menu item no "+howFarNow);
+				driver.navigate().back();
+				continue superloop;
+			}
+			break superloop;
+		}
 	}
 }
