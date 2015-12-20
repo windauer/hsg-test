@@ -25,7 +25,7 @@ public class STC_HistoricalDocumentsLeftPanel extends AbstractSeleniumTest {
 	/**
 	 * Tests a few example links to volumes from the left panel select field (options of #select-volume).
 	 */
-	@Test
+	@Ignore @Test
 	public void testVolumeLinks() throws Exception {
 		final int INSIDE = 25;
 		
@@ -55,7 +55,7 @@ public class STC_HistoricalDocumentsLeftPanel extends AbstractSeleniumTest {
 	/**
 	 * This one tests ALL links to volumes from the left panel select field (all options of #select-volume).
 	 */
-	@Test @Ignore
+	@Ignore @Test
 	public void testAllVolumeLinks() throws Exception {
 		checkAllSelectOptions("select-volume", "volume entry entered from #select-volume");
 	}
@@ -63,7 +63,7 @@ public class STC_HistoricalDocumentsLeftPanel extends AbstractSeleniumTest {
 	/**
 	 * This test verifies all the links to administration sites from the left panel (#select-administration select field).
 	 */
-	@Test
+	@Ignore @Test
 	public void testAllAdministrationLinks() throws Exception {
 		checkAllSelectOptions("select-administration", "administration site entered from #select-administration ");
 	}
