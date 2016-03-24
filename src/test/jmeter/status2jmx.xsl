@@ -4,7 +4,9 @@
 
     <xsl:param name="host">localhost</xsl:param>
     <xsl:param name="port">8080</xsl:param>
+    <xsl:param name="root">/exist/apps/hsg-shell</xsl:param>
     <xsl:param name="threads">25</xsl:param>
+    <xsl:param name="loops">10</xsl:param>
     
     <xsl:template match="/">
         <jmeterTestPlan version="1.2" properties="2.8" jmeter="2.13 r1665067">
@@ -28,6 +30,11 @@
                                 <stringProp name="Argument.value"><xsl:value-of select="$port"/></stringProp>
                                 <stringProp name="Argument.metadata">=</stringProp>
                             </elementProp>
+                            <elementProp name="root" elementType="Argument">
+                                <stringProp name="Argument.name">root</stringProp>
+                                <stringProp name="Argument.value"><xsl:value-of select="$root"/></stringProp>
+                                <stringProp name="Argument.metadata">=</stringProp>
+                            </elementProp>
                         </collectionProp>
                     </elementProp>
                     <stringProp name="TestPlan.user_define_classpath"/>
@@ -41,7 +48,7 @@
                             guiclass="LoopControlPanel" testclass="LoopController"
                             testname="Loop Controller" enabled="true">
                             <boolProp name="LoopController.continue_forever">false</boolProp>
-                            <stringProp name="LoopController.loops">10</stringProp>
+                            <stringProp name="LoopController.loops"><xsl:value-of select="$loops"/></stringProp>
                         </elementProp>
                         <stringProp name="ThreadGroup.num_threads">
                             <xsl:value-of select="$threads"/>
@@ -226,7 +233,7 @@
             <stringProp name="HTTPSampler.response_timeout"/>
             <stringProp name="HTTPSampler.protocol">http</stringProp>
             <stringProp name="HTTPSampler.contentEncoding"/>
-            <stringProp name="HTTPSampler.path"><xsl:value-of select="jmx:requestURI"/></stringProp>
+            <stringProp name="HTTPSampler.path">${root}<xsl:value-of select="jmx:requestURI"/></stringProp>
             <stringProp name="HTTPSampler.method">GET</stringProp>
             <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
             <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
