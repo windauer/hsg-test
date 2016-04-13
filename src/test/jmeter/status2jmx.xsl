@@ -8,6 +8,8 @@
     <xsl:param name="threads">25</xsl:param>
     <xsl:param name="loops">10</xsl:param>
     
+    <xsl:param name="duplicates">false</xsl:param>
+    
     <xsl:template match="/">
         <jmeterTestPlan version="1.2" properties="2.8" jmeter="2.13 r1665067">
             <hashTree>
@@ -216,6 +218,21 @@
                 </hashTree>
             </hashTree>
         </jmeterTestPlan>
+    </xsl:template>
+    
+    <xsl:template match="jmx:RecentQueryHistory">
+        <xsl:choose>
+            <xsl:when test="$duplicates">
+                <xsl:for-each select="jmx:row">
+                    <xsl:sort select="xs:integer(jmx:mostRecentExecutionTime)" order="ascending"/>
+                    <xsl:apply-templates select="."/>
+                </xsl:for-each>
+            </xsl:when>
+        </xsl:choose>
+        <xsl:for-each-group select="jmx:row" group-by="jmx:requestURI">
+            <xsl:sort select="xs:integer(jmx:mostRecentExecutionTime)" order="ascending"/>
+            <xsl:apply-templates select="current-group()[1]"/>
+        </xsl:for-each-group>
     </xsl:template>
     
     <xsl:template match="jmx:RecentQueryHistory/jmx:row">
