@@ -9,17 +9,17 @@
         <collectionProp name="Arguments.arguments">
           <elementProp name="host" elementType="Argument">
             <stringProp name="Argument.name">host</stringProp>
-            <stringProp name="Argument.value">54.173.38.196</stringProp>
+              <stringProp name="Argument.value">${__property(http.server,,localhost)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="port" elementType="Argument">
             <stringProp name="Argument.name">port</stringProp>
-            <stringProp name="Argument.value">8080</stringProp>
+              <stringProp name="Argument.value">${__property(http.port,,8080)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="root" elementType="Argument">
             <stringProp name="Argument.name">root</stringProp>
-            <stringProp name="Argument.value">/exist/apps/hsg-shell</stringProp>
+              <stringProp name="Argument.value">${__property(http.path,,/exist/apps/hsg-shell)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
         </collectionProp>
@@ -31,9 +31,9 @@
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
-          <stringProp name="LoopController.loops">10</stringProp>
+          <stringProp name="LoopController.loops">${__property(loops,,10)}</stringProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">25</stringProp>
+        <stringProp name="ThreadGroup.num_threads">${__property(threads,,25)}</stringProp>
         <stringProp name="ThreadGroup.ramp_time">0.2</stringProp>
         <longProp name="ThreadGroup.start_time">1282596044000</longProp>
         <longProp name="ThreadGroup.end_time">1282596044000</longProp>
