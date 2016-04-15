@@ -191,8 +191,12 @@
 			<!-- SAVE results as xml -->
 			<property name="jmeter.save.saveservice.output_format" value="xml" />
 			<property name="jmeter.save.saveservice.assertion_results" value="all" />
-
-			<testplans dir="${basedir}/src/test/jmeter" includes="HSG-Shell.jmx" />
+			<property name="loops" value="${jmeter.loop}"/>
+			<property name="threads" value="${jmeter.threads}"/>
+			<property name="http.server" value="${jmeter.host}"/>
+			<property name="http.port" value="${jmeter.port}"/>
+			<property name="http.path" value="${jmeter.path}"/>
+			<testplans dir="${basedir}/src/test/jmeter" includes="${jmeter.jmx}"/>
 		</jmeter>
 
 		<xslt in="${jmeter_reports}/HSG-Shell.jtl" out="${jmeter_reports}/HSG-Shell.html" style="${binaries}/${jmeter.dist}/extras/jmeter-results-report_21.xsl" />

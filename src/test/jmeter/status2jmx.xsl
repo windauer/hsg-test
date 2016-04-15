@@ -2,13 +2,13 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:jmx="http://exist-db.org/jmx"
     xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="xs" version="2.0">
 
-    <xsl:param name="host">localhost</xsl:param>
-    <xsl:param name="port">8080</xsl:param>
-    <xsl:param name="root">/exist/apps/hsg-shell</xsl:param>
-    <xsl:param name="threads">25</xsl:param>
-    <xsl:param name="loops">10</xsl:param>
+    <xsl:param name="host">${__property(http.server,,localhost)}</xsl:param>
+    <xsl:param name="port">${__property(http.port,,8080)}</xsl:param>
+    <xsl:param name="root">${__property(http.path,,/exist/apps/hsg-shell)}</xsl:param>
+    <xsl:param name="threads">${__property(threads,,25)}</xsl:param>
+    <xsl:param name="loops">${__property(loops,,10)}</xsl:param>
     
-    <xsl:param name="duplicates">false</xsl:param>
+    <xsl:param name="duplicates" select="false()"/>
     
     <xsl:template match="/">
         <jmeterTestPlan version="1.2" properties="2.8" jmeter="2.13 r1665067">
@@ -228,11 +228,13 @@
                     <xsl:apply-templates select="."/>
                 </xsl:for-each>
             </xsl:when>
+            <xsl:otherwise>
+                <xsl:for-each-group select="jmx:row" group-by="jmx:requestURI">
+                    <xsl:sort select="xs:integer(jmx:mostRecentExecutionTime)" order="ascending"/>
+                    <xsl:apply-templates select="current-group()[1]"/>
+                </xsl:for-each-group>
+            </xsl:otherwise>
         </xsl:choose>
-        <xsl:for-each-group select="jmx:row" group-by="jmx:requestURI">
-            <xsl:sort select="xs:integer(jmx:mostRecentExecutionTime)" order="ascending"/>
-            <xsl:apply-templates select="current-group()[1]"/>
-        </xsl:for-each-group>
     </xsl:template>
     
     <xsl:template match="jmx:RecentQueryHistory/jmx:row">
