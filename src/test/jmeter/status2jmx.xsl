@@ -2,9 +2,10 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:jmx="http://exist-db.org/jmx"
     xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="xs" version="2.0">
 
+    <xsl:param name="path">/exist/apps/hsg-shell</xsl:param>
     <xsl:param name="host">${__property(http.server,,localhost)}</xsl:param>
     <xsl:param name="port">${__property(http.port,,8080)}</xsl:param>
-    <xsl:param name="root">${__property(http.path,,/exist/apps/hsg-shell)}</xsl:param>
+    <xsl:param name="root">${__property(http.path,,<xsl:value-of select="$path"/>)}</xsl:param>
     <xsl:param name="threads">${__property(threads,,25)}</xsl:param>
     <xsl:param name="loops">${__property(loops,,10)}</xsl:param>
     
@@ -43,7 +44,7 @@
                 </TestPlan>
                 <hashTree>
                     <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup"
-                        testname="Historicaldocuments and Milestones and Departmenthistory"
+                        testname="{replace(document-uri(root(.)), '^.*?([^/]+)$', '$1')}"
                         enabled="true">
                         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
                         <elementProp name="ThreadGroup.main_controller" elementType="LoopController"
@@ -55,7 +56,7 @@
                         <stringProp name="ThreadGroup.num_threads">
                             <xsl:value-of select="$threads"/>
                         </stringProp>
-                        <stringProp name="ThreadGroup.ramp_time">0.2</stringProp>
+                        <stringProp name="ThreadGroup.ramp_time">3</stringProp>
                         <longProp name="ThreadGroup.start_time">1282596044000</longProp>
                         <longProp name="ThreadGroup.end_time">1282596044000</longProp>
                         <boolProp name="ThreadGroup.scheduler">false</boolProp>
@@ -211,7 +212,7 @@
                             testclass="GaussianRandomTimer"
                             testname="Gauss&apos;scher Zufalls-Zeitgeber" enabled="true">
                             <stringProp name="ConstantTimer.delay">100</stringProp>
-                            <stringProp name="RandomTimer.range">200.0</stringProp>
+                            <stringProp name="RandomTimer.range">2000.0</stringProp>
                         </GaussianRandomTimer>
                         <hashTree/>
                     </hashTree>
@@ -240,7 +241,7 @@
     <xsl:template match="jmx:RecentQueryHistory/jmx:row">
         <HTTPSamplerProxy guiclass="HttpTestSampleGui"
             testclass="HTTPSamplerProxy"
-            testname="{jmx:requestURI}" enabled="true">
+            testname="{substring-after(jmx:requestURI, $path)}" enabled="true">
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments"
                 guiclass="HTTPArgumentsPanel" testclass="Arguments"
                 testname="User Defined Variables" enabled="true">
@@ -252,7 +253,7 @@
             <stringProp name="HTTPSampler.response_timeout"/>
             <stringProp name="HTTPSampler.protocol">http</stringProp>
             <stringProp name="HTTPSampler.contentEncoding"/>
-            <stringProp name="HTTPSampler.path">${root}<xsl:value-of select="jmx:requestURI"/></stringProp>
+            <stringProp name="HTTPSampler.path">${root}<xsl:value-of select="substring-after(jmx:requestURI, $path)"/></stringProp>
             <stringProp name="HTTPSampler.method">GET</stringProp>
             <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
             <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
