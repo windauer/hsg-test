@@ -234,4 +234,7 @@
 
 	<!-- Do nothing gets called from hsg-project 'ant all' -->
 	<target name="noop" depends="prepare"/>
+	
+	<!-- Do nothing gets called from hsg-project 'ant build-all' -->
+	<target name="xar"/>
 </project>
