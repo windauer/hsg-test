@@ -228,8 +228,6 @@
 		</delete>
 	</target>
 
-  <target name="xar" />
-
 	<target name="clean">
 		<delete dir="${build}"/>
 	</target>
